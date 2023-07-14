@@ -1,0 +1,28 @@
+/* sidebar */
+.Sidebar-area .v-list-item .v-list-item__title, .Sidebar-area .v-list-item i{
+  color: #ad0000!important;
+}
+.Sidebar-area .v-list-item.primary--text{
+    background-color: #ad0000;
+    color: #fff !important;
+}
+.Sidebar-area .v-list-item.primary--text .v-list-item__title ,.Sidebar-area .v-list-item.primary--text i{
+  color: #fff !important;
+}
+
+
+.v-application .primary{
+  background-color: #ad0000!important;
+}
+span.time {
+  font-size: 10px;
+  margin-top: 5px;
+}
+.v-list-item:hover span.time {
+  color: #fff !important;
+}
+/* .v-list-group__items a{
+  min-height: 35px;
+  padding-left: 30px;
+} */
+/* end sidebar */
