@@ -123,7 +123,44 @@ class TaskController extends Controller
 
         return new TaskResource($task);
     }
-
+    /**
+     * * @OA\Get(
+     *   path="/api/task/{task}",
+     *   summary="single task",
+     *   tags={"Task"},
+     *     @OA\Parameter(
+     *      name="task",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *   *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *      *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function show(Request $request, Task $task): TaskResource
     {
         return new TaskResource($task);
@@ -199,6 +236,44 @@ class TaskController extends Controller
         return new TaskResource($task);
     }
 
+    /**
+     * * @OA\Delete(
+     *   path="/api/task/{task}",
+     *   summary="remove task",
+     *   tags={"Task"},
+     *     @OA\Parameter(
+     *      name="task",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *   *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *      *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function destroy(Request $request, Task $task): Response
     {
         $task->delete();
@@ -206,6 +281,52 @@ class TaskController extends Controller
         return response()->noContent();
     }
 
+    /**
+     * * @OA\Put(
+     *   path="/api/task/status/change/{task}/{status}",
+     *   summary="remove task",
+     *   tags={"Task"},
+     *     @OA\Parameter(
+     *      name="task",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *     @OA\Parameter(
+     *      name="status",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="integer"
+     *      )
+     *   ),
+     *   *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *      *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     * )
+     */
     public function statusChange(Request $request, Task $task, $status)
     {
         $task->update(['status'=>$status]);
