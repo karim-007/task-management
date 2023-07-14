@@ -38,8 +38,6 @@ class Task extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'deadline' => 'timestamp',
-        'assign_at' => 'timestamp',
         'assign_by' => 'integer',
         'assign_to' => 'integer',
         'status' => 'integer',

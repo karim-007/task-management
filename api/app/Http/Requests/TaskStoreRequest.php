@@ -20,18 +20,10 @@ class TaskStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['nullable', 'string', 'max:100'],
+            'title' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'deadline' => ['required'],
-            'assign_at' => ['required'],
-            'assign_by' => ['nullable'],
-            'assign_to' => ['nullable'],
-            'status' => ['required', 'integer'],
-            'is_active' => ['required'],
-            'created_by' => ['nullable'],
-            'updated_by' => ['nullable'],
-            'ip' => ['nullable', 'string', 'max:50'],
-            'browser' => ['nullable', 'string'],
+            'assign_to' => ['nullable','not_in:0','exists:users,id'],
         ];
     }
 }

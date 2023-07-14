@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Resources\UserCollection;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -41,4 +43,9 @@ class AuthController extends Controller
     }
 
 
+    public function allUsers(Request $request)
+    {
+        $users = User::where('id','!=',auth()->id())->get();
+        return new UserCollection($users);
+    }
 }

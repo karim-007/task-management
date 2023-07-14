@@ -1,11 +1,11 @@
 export default {
   state: () => ({
-    users: [],
+    tasks: [],
     totalItems: 0,
   }),
   getters: {
-    users(state){
-      return state.users;
+    tasks(state){
+      return state.tasks;
     },
     totalItems(state){
       return state.totalItems;
@@ -44,8 +44,8 @@ export default {
   actions: {
     async getItems(context, payload) {
       this.$axios.get(payload.apiUrl).then((response) => {
-        context.commit('SET_ITEMS', {stateName: payload.stateName, data: response?.data?.data})
-        context.commit('SET_TOTAL_ITEMS', response?.data?.meta?.total)
+        context.commit('SET_ITEMS', {stateName: payload.stateName, data: response.data.data})
+        context.commit('SET_TOTAL_ITEMS', response.data.meta.total)
       }).catch(() => {
         context.commit('SET_ITEMS', {stateName: payload.stateName, data: []})
         context.commit('SET_TOTAL_ITEMS', 0)

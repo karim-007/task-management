@@ -20,8 +20,10 @@ Route::post('/registration', [\App\Http\Controllers\Auth\LoginController::class,
 
 Route::group(['middleware' => ['history','auth:sanctum']], function () {
     Route::get('/user', [App\Http\Controllers\AuthController::class, 'user']);
+    Route::get('/users', [App\Http\Controllers\AuthController::class, 'allUsers']);
 
     Route::apiResource('task', App\Http\Controllers\TaskController::class);
+    Route::put('/task/status/change/{task}/{status}', [App\Http\Controllers\TaskController::class,'statusChange']);
     Route::apiResource('task-comment', App\Http\Controllers\TaskCommentController::class);
 
 });

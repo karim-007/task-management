@@ -17,11 +17,11 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100)->nullable();
             $table->text('description')->nullable();
-            $table->timestamp('deadline');
-            $table->timestamp('assign_at');
+            $table->timestamp('deadline')->nullable();
+            $table->timestamp('assign_at')->nullable();
             $table->foreignId('assign_by')->nullable()->constrained('users');
             $table->foreignId('assign_to')->nullable()->constrained('users');
-            $table->tinyInteger('status')->comment('0=pending, 2=processing, 3=completed');
+            $table->tinyInteger('status')->default(0)->comment('0=pending, 2=processing, 3=completed');
             $table->boolean('is_active')->default(true);
             $table->foreignId('created_by')->nullable()->constrained('users');
             $table->foreignId('updated_by')->nullable()->constrained('users');
