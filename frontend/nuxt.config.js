@@ -143,7 +143,7 @@ export default {
         redirect: {
             login: '/auth/signin',
             logout: '/auth/signin',
-            callback: '/auth/signin',
+            callback: '/dashboard',
             home: '/dashboard'
         }
     },

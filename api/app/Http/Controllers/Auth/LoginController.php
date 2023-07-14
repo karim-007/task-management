@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Traits\CommonTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
+    use CommonTrait;
     /**
      * @OA\Post(
      *   path="/api/login",
@@ -97,4 +102,71 @@ class LoginController extends Controller
         return response()->json(['status' => 'fail', 'message' => 'Invalid Request'], 404);
     }
 
+    /**
+     * @OA\Post(
+     *   path="/api/registration",
+     *   tags={"User registration"},
+     *   summary="user registration",
+     *
+     *     @OA\Parameter(
+     *      name="name",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="email",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="email"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="password",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *          type="string"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *      *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *)
+     **/
+    public function registration(UserStoreRequest $request)
+    {
+        $data = $request->validated();
+        unset($data['password']);
+        $data +=[
+            'password'=>Hash::make($request->password)
+        ];
+        $data += $this->storeMetadata($request);
+
+        $user = User::create($data);
+        return new UserResource($user);
+    }
 }

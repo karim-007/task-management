@@ -1,12 +1,31 @@
 <template>
   <div>
     <v-card class="text-center pa-1">
-      <v-card-title class="justify-center title mb-2">Sign in to your account</v-card-title>
+      <v-card-title class="justify-center title mb-2">Sign up</v-card-title>
 
       <!-- sign in form -->
       <v-card-text>
         <validation-observer ref="observer" v-slot="{ invalid, validate }">
           <v-form ref="form" @submit.prevent="submit()" lazy-validation>
+            <validation-provider
+                v-slot="{ errors }"
+                name="name"
+                vid="name"
+                rules="required|max:191"
+            >
+              <v-text-field
+                  v-model="form.name"
+                  :validate-on-blur="false"
+                  :label="'name'"
+                  :error-messages="errors"
+                  name="name"
+                  dense
+                  outlined
+                  auto-grow
+                  no-resize
+                  @keyup.enter="submit"
+              />
+            </validation-provider>
             <validation-provider
               v-slot="{ errors }"
               name="email"
@@ -16,7 +35,6 @@
               <v-text-field
                 v-model="form.email"
                 :validate-on-blur="false"
-                :error="error"
                 :label="'Email'"
                 :error-messages="errors"
                 name="email"
@@ -39,7 +57,6 @@
                 :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[rules.required]"
                 :type="showPassword ? 'text' : 'password'"
-                :error="error"
                 :error-messages="errors"
                 :label="$t('login.password')"
                 name="password"
@@ -60,20 +77,12 @@
               dense
               color="primary"
               @click="submit"
-            >{{ $t('login.button') }}
+            >{{ 'Submit'}}
             </v-btn>
-            <div v-if="errorProvider" class="error--text">{{ errorProviderMessages }}</div>
-
             <div class="mt-5">
-              <router-link :to="localePath('/auth/forgot-password')" style="text-decoration: none;">
-                {{ $t('login.forgot') }}
+              <router-link :to="localePath('/auth/signin')" style="text-decoration: none;">
+                {{ $t('login.button') }}
               </router-link>
-              <v-btn
-                class="ml-1"
-                color="primary"
-                to="/auth/signup"
-              >{{ 'Signup' }}
-              </v-btn>
             </div>
           </v-form>
         </validation-observer>
@@ -84,39 +93,25 @@
 </template>
 
 <script>
+import {common as commonMixin} from "@/mixins/common";
 export default {
+  name:'Registration',
   layout: 'auth',
+  auth:false,
+  mixins: [commonMixin],
   data() {
     return {
       // sign in buttons
       isLoading: false,
       isSignInDisabled: false,
-
       // form
       form: {
-        email: '',
-        password: '',
+        name: null,
+        email: null,
+        password: null,
       },
-
-      // form error
-      error: false,
-      errorMessages: '',
-
-      errorProvider: false,
-      errorProviderMessages: '',
-
       // show password field
       showPassword: false,
-
-      providers: [{
-        id: 'google',
-        label: 'Google',
-        isLoading: false
-      }, {
-        id: 'facebook',
-        label: 'Facebook',
-        isLoading: false
-      }],
 
       // input rules
       rules: {
@@ -129,7 +124,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.isLoading = true
         this.isSignInDisabled = true
-        this.signIn()
+        this.signUp()
       }
     },
     check() {
@@ -137,23 +132,17 @@ export default {
         this.$router.push('/dashboard')
       }
     },
-    signIn() {
+    signUp() {
       const formData = new FormData()
 
+      formData.append('name', this.form.name)
       formData.append('email', this.form.email)
       formData.append('password', this.form.password)
 
-      this.$auth.loginWith('auth', {data: formData})
+      this.$axios.post('/registration', formData)
         .then((response) => {
-          const data = response?.data
-          if (data) {
-            this.$axios.setHeader('Authorization', 'Bearer ' + data.access_token)
-            this.$axios.setToken(data.access_token)
-            this.$auth.setUserToken(data.access_token)
-            this.$auth.setUser(data.user)
-            //this.$ability.update(data.user.ability)
-            this.$router.push('/dashboard')
-          }
+          this.$toaster.success('Registration success');
+          this.$router.push('/auth/signin')
         })
         .catch((error) => {
           if (error.response.status === 422) {
@@ -168,15 +157,6 @@ export default {
           this.isSignInDisabled = false
         })
     },
-    signInProvider(provider) {
-    },
-    resetErrors() {
-      this.error = false
-      this.errorMessages = ''
-
-      this.errorProvider = false
-      this.errorProviderMessages = ''
-    }
   }
 }
 </script>

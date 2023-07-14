@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/login', [\App\Http\Controllers\Auth\LoginController::class, 'authentication']);
+Route::post('/registration', [\App\Http\Controllers\Auth\LoginController::class, 'registration']);
 
 Route::group(['middleware' => ['history','auth:sanctum']], function () {
     Route::get('/user', [App\Http\Controllers\AuthController::class, 'user']);
