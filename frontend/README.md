@@ -7,6 +7,8 @@
 # node version not more than 16
 $ yarn install
 
+# copy the .env.example to .env and change according to your config
+
 # serve with hot reload at localhost:3000
 $ yarn dev
 
